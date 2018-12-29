@@ -3,9 +3,10 @@ class CellPhone {
         this.card = card
         this.isTalking = false
         this.callLength = 0
+        this.remainingMinutes = this.remainingMinutes
         this.currCall = {
             callLength: 0,
-            phoneNumber: '',
+            phoneNumber: this.formattedPhoneNumber,
             wasCutOff: false
         }
         this.prevCalls = []
@@ -15,21 +16,28 @@ class CellPhone {
         return this.currCall.callLength > 0 ? true : false
     }
 
-    call(phoneNumber) {
+    startCall(phoneNumber) {
         this.currCall.phoneNumber = phoneNumber
         this.currCall.callLength = 0
         this.currCall.wasCutOff = false
+        console.log('Starting call...')
     }
 
     endCall() {
-        this.prevCalls.push(this.currCall)
-        this.currCall = {}
+        if (this.currCall.phoneNumber == '') {
+            console.log('No calls are currently active')
+        } else {
+            this.prevCalls.push(this.currCall)
+            this.currCall = {}
+            console.log('Ending call...')
+        }
     }
 
     tick() {
         this.currCall.callLength++
-        this.card.remainingMinutes--
-        if(this.card.remainingMinutes === 0) {
+        this.remainingMinutes--
+        console.log('Tick')
+        if(this.remainingMinutes === 0) {
             this.currCall.wasCutOff = true
             this.endCall()
         }
@@ -44,7 +52,6 @@ class CellPhone {
             let wasCutOffYo = wasCutOff ? 'cut off at' : ''
             historyString += ` ${wasCutOffYo} ${phoneNumber} (${callLength} ${pluralOrSingular}),`
         })
-
 
         return historyString.slice(0, historyString.length-1)
     }

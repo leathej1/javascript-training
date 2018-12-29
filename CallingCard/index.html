@@ -11,25 +11,23 @@
     <div id='dialer'>
         <h2>Dialer</h2>
         <form id='phone-number-field'>
-            <input type="text" id='phone-number-input'>
-            <button id='button-start'>Start Call</button>            
-        </form>
-        <button id='button-end'>End Call</button>
-        <h3>Current balance: $</h3><p id="remaining-funds-text"></p>
+            <button id='start-call-button'>Start Call</button>            
+            <input type="text" id='phone-number-input'></input>            
+        </form><p></p>
+        <button id='end-call-button'>End Call</button>    
+        <h3 id="remaining-minutes-text"></h3>
+        <h3 id="remaining-funds-text"></h3>
     </div>
     <div id='add-funds'>
         <form id='add-funds-field'>
             <input type="number" id='funds-input'>
-            <button id='button-add-funds'>Add funds</button>
+            <button id='add-funds-button'>Add funds</button>
         </form>
-    </div>
-    <div id='minutes'>
-        <h3>Remaining minutes: </h3><p id="remaining-minutes-text"></p><h3>minutes</h3>
     </div>
     <div id='history'>
         <h2>Call History</h2>
-        <ul id='call-history-list'></ul>
         <button id='clear-history-button'>Clear history</button>
+        <ul id='call-history-list'></ul>
     </div>
     
     <script src="calling-card.js"></script>
