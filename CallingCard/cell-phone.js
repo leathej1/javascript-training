@@ -12,44 +12,35 @@ class CellPhone extends CallingCard {
         this.prevCalls = []
     }
 
-    getRemainingMinutes() {
-        super.getRemainingMinutes()
-    }
-
-    getRemainingFunds() {
-        super.getRemainingFunds()
-    }
-
     isTalking() {
         return this.currCall.callLength > 0 ? true : false
     }
 
     startCall(phoneNumber) {
-        this.currCall.phoneNumber = phoneNumber
-        this.currCall.callLength = 0
-        this.currCall.wasCutOff = false
-        console.log('Starting call...')
+        if (this.remainingMinutes < 1) {
+            console.log('Insufficient funds')
+        } else {
+            this.currCall.phoneNumber = phoneNumber
+            this.currCall.callLength = 0
+            this.currCall.wasCutOff = false
+            console.log('Starting call...')
+        }
     }
 
-    endCall() {        
+    endCall() {
         if (this.currCall.phoneNumber == null) {
             console.log('No calls are currently active')
         } else {
-            this.prevCalls.push(this.currCall)
+            //this.prevCalls.push(this.currCall)
             console.log('Ending call...')
-            
-            this.getRemainingMinutes()        
-            this.getRemainingFunds()
         }
-        this.currCall = {}
-        document.getElementById('phone-number-input').innerHTML = ""
     }
 
     tick() {
         this.currCall.callLength++
         this.remainingMinutes--
         console.log('Tick')
-        if(this.remainingMinutes === 0) {
+        if (this.remainingMinutes === 0) {
             this.currCall.wasCutOff = true
             this.endCall()
         }
@@ -65,6 +56,6 @@ class CellPhone extends CallingCard {
             historyString += ` ${wasCutOffYo} ${phoneNumber} (${callLength} ${pluralOrSingular}),`
         })
 
-        return historyString.slice(0, historyString.length-1)
+        return historyString.slice(0, historyString.length - 1)
     }
 }
