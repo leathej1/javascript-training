@@ -1,15 +1,23 @@
-class CellPhone {
-    constructor(card) {
+class CellPhone extends CallingCard {
+    constructor(card, balanceInMinutes, balanceInDollars) {
+        super(balanceInMinutes, balanceInDollars)
         this.card = card
         this.isTalking = false
         this.callLength = 0
-        this.remainingMinutes = this.remainingMinutes
         this.currCall = {
             callLength: 0,
             phoneNumber: this.formattedPhoneNumber,
             wasCutOff: false
         }
         this.prevCalls = []
+    }
+
+    getRemainingMinutes() {
+        super.getRemainingMinutes()
+    }
+
+    getRemainingFunds() {
+        super.getRemainingFunds()
     }
 
     isTalking() {
@@ -23,14 +31,18 @@ class CellPhone {
         console.log('Starting call...')
     }
 
-    endCall() {
-        if (this.currCall.phoneNumber == '') {
+    endCall() {        
+        if (this.currCall.phoneNumber == null) {
             console.log('No calls are currently active')
         } else {
             this.prevCalls.push(this.currCall)
-            this.currCall = {}
             console.log('Ending call...')
+            
+            this.getRemainingMinutes()        
+            this.getRemainingFunds()
         }
+        this.currCall = {}
+        document.getElementById('phone-number-input').innerHTML = ""
     }
 
     tick() {

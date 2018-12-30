@@ -1,18 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    let card = new CallingCard(20, 2)
-
-    let phone = new CellPhone(card)
-
-    card.getRemainingMinutes()
     
-    card.getRemainingFunds()    
+    // Set rate and add funds
+    initializeCard(20, 2)
 
     // Target the phone number field
-    var dialer = document.getElementById('start-call-button')
+    var startCall = document.getElementById('start-call-button')
 
     // Add click event listener for start call button
-    dialer.addEventListener('click', function() {
+    startCall.addEventListener('click', function() {
 
         // Prevent the page from reloading
         event.preventDefault()
@@ -27,8 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         phone.remainingMinutes = card.getRemainingMinutes()
 
-        phone.tick()
-
         // Create a list item for the call history
         if (newPhoneNumber * 1 > 1000000000) {
             console.log('Number', formattedPhoneNumber, 'meets requirements')
@@ -41,13 +34,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var endCall = document.getElementById('end-call-button')
 
     // Add a click listener for the end call button
-    endCall.addEventListener('click', function() {
-        
+    endCall.addEventListener('click', function() {       
+                
+        // Prevent the page from reloading
+        event.preventDefault()
+
         phone.endCall()
 
-        card.getRemainingMinutes()
-
-        card.getRemainingFunds()    
+        card.useMinutes(1)
     })
 
     // Target the add funds field
@@ -105,4 +99,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return null
       }
     })
+
+    function initializeCard(rate, funds) {
+        let card = new CallingCard(rate, funds)
+
+        let phone = new CellPhone(card)
+    
+        card.calculateRemaingMinutes()
+    
+        card.getRemainingMinutes()
+        
+        card.getRemainingFunds()  
+    }
 })
