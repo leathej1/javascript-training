@@ -1,7 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    let card = new CallingCard(20, 2)
+
+    let phone = new CellPhone(card)
+
+    card.calculateRemaingMinutes()
     
-    // Set rate and add funds
-    initializeCard(20, 2)
+    card.getRemainingMinutes()
+    
+    card.getRemainingFunds()
 
     // Target the phone number field
     var startCall = document.getElementById('start-call-button')
@@ -99,16 +106,4 @@ document.addEventListener('DOMContentLoaded', function() {
         return null
       }
     })
-
-    function initializeCard(rate, funds) {
-        let card = new CallingCard(rate, funds)
-
-        let phone = new CellPhone(card)
-    
-        card.calculateRemaingMinutes()
-    
-        card.getRemainingMinutes()
-        
-        card.getRemainingFunds()  
-    }
 })
