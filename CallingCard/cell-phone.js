@@ -6,7 +6,7 @@ class CellPhone extends CallingCard {
         this.callLength = 0
         this.currCall = {
             callLength: 0,
-            phoneNumber: this.formattedPhoneNumber,
+            phoneNumber: '',
             wasCutOff: false
         }
         this.prevCalls = []
@@ -32,6 +32,10 @@ class CellPhone extends CallingCard {
             console.log('No calls are currently active')
         } else {
             //this.prevCalls.push(this.currCall)
+            // super.useMinutes(1)
+            // super.getRemainingMinutes()
+            // super.getRemainingFunds()
+            document.getElementById('phone-number-input').value = ""
             console.log('Ending call...')
         }
     }

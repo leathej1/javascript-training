@@ -17,7 +17,9 @@ class CallingCard {
 	addDollars(dollarsToAdd) {
 		this.balanceInDollars += dollarsToAdd * 1
 		this.calculateRemaingMinutes()
-		return this.balanceInMinutes
+		this.getRemainingMinutes()
+		this.getRemainingFunds()
+		//return this.balanceInMinutes
 	}
 
 	useMinutes(minutesToUse) {
@@ -35,7 +37,6 @@ class CallingCard {
 
 	getRemainingFunds() {
 		this.balanceInDollars = (this.balanceInMinutes * this.cardRate) / 100
-		this.balanceInDollars = this.balanceInDollars.toFixed(2)
 		console.log('Current balance: $', this.balanceInDollars)
 		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars
 		return this.balanceInDollars

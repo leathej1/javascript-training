@@ -1,30 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     let card = new CallingCard(20, 2)
-
     let phone = new CellPhone(card)
-
     card.calculateRemaingMinutes()
-
     card.getRemainingMinutes()
-
     card.getRemainingFunds()
 
-    // Target the phone number field
+    // Start call button event listener
     var startCall = document.getElementById('start-call-button')
-
-    // Add click event listener for start call button
     startCall.addEventListener('click', function (event) {
-
-        // Prevent the page from reloading
         event.preventDefault()
-
-        // Target the phone number value field
         var newPhoneNumber = document.getElementById('phone-number-input').value
-
-        // Format the phone number with regex for display purposes
         var formattedPhoneNumber = formatPhoneNumber(newPhoneNumber)
-
         phone.startCall(formattedPhoneNumber)
 
         // Create a list item for the call history
@@ -36,53 +23,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 
-    // Target the end call button   
+    // End call button event listener 
     var endCall = document.getElementById('end-call-button')
-
-    // Add a click listener for the end call button
     endCall.addEventListener('click', function (event) {
-
-        // Prevent the page from reloading
         event.preventDefault()
-
         phone.endCall()
-
         card.useMinutes(1)
-
         card.getRemainingMinutes()
-
         card.getRemainingFunds()
     })
 
-    // Target the add funds field
+    // Add funds button event listener
     var addFunds = document.getElementById('add-funds-button')
-
-    // Add click event handler for add funds button
     addFunds.addEventListener('click', function (event) {
-
-        // Prevent the page from reloading
         event.preventDefault()
-
-        // Target the funds value field
         var fundsToAdd = document.getElementById('funds-input').value
-
-        // Log the value that we are adding
         console.log('Adding $', fundsToAdd)
-
-        // Call the function to add the funds
         card.addDollars(fundsToAdd)
     })
 
-    // Clear call history on button submit
+    // Clear history button event listener
     var historyClearButton = document.getElementById('clear-history-button')
-
-    // Listen for button push
     historyClearButton.addEventListener('click', function (event) {
-
-        // Clear the call history list
         document.getElementById('call-history-list').innerHTML = ""
     })
 
+    // Format phone number
     function formatPhoneNumber(phoneNumberString) {
         var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
         var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
@@ -92,20 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return null
     }
 
+    // Create history list item
     function createListItem(callHistoryText) {
-        // Create a new list item element
         var newCallHistoryItem = document.createElement('li')
-
-        // Add the call to the call history
         newCallHistoryItem.innerText = callHistoryText
-
-        // Log the new callnumber
         console.log('New call: ', callHistoryText)
-
-        // Target the call history list
         var callHistoryList = document.getElementById('call-history-list')
-
-        // Add a new li for the new call history item
         callHistoryList.appendChild(newCallHistoryItem)
     }
 })
