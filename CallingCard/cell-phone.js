@@ -1,6 +1,6 @@
 class CellPhone extends CallingCard {
     constructor(card, balanceInMinutes, balanceInDollars) {
-        super(balanceInMinutes, balanceInDollars)
+        super(card, balanceInMinutes, balanceInDollars)
         this.card = card
         this.isTalking = false
         this.callLength = 0
@@ -17,24 +17,30 @@ class CellPhone extends CallingCard {
     }
 
     startCall(phoneNumber) {
-        if (this.remainingMinutes < 1) {
-            console.log('Insufficient funds')
+        if (phoneNumber * 1 > 1000000000) {
+            var formattedPhoneNumber = this.formatPhoneNumber(phoneNumber)
+            console.log('Number', formattedPhoneNumber, 'meets requirements')            
         } else {
+            console.log('Number', phoneNumber, 'does not meet requirements')
+        }        
+        if (this.balanceInMinutes > 0) {
             this.currCall.phoneNumber = phoneNumber
             this.currCall.callLength = 0
             this.currCall.wasCutOff = false
+            super.createListItem(formattedPhoneNumber)
             console.log('Starting call...')
+        } else {
+            console.log('Insufficient funds')
+            return
         }
     }
 
     endCall() {
-        if (this.currCall.phoneNumber == null) {
+        if (this.phoneNumber == null) {
             console.log('No calls are currently active')
         } else {
             //this.prevCalls.push(this.currCall)
-            // super.useMinutes(1)
-            // super.getRemainingMinutes()
-            // super.getRemainingFunds()
+            super.useMinutes(1)
             document.getElementById('phone-number-input').value = ""
             console.log('Ending call...')
         }

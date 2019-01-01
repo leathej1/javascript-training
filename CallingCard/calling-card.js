@@ -1,7 +1,8 @@
 class CallingCard {
-	constructor(cardRate, balanceInDollars) {
+	constructor(cardRate, balanceInMinutes, balanceInDollars) {
 		this.cardRate = cardRate
-		this.balanceInDollars = balanceInDollars
+		this.balanceInMinutes = 0
+		this.balanceInDollars = 0
 	}
 
 	calculateRemaingMinutes() {
@@ -19,7 +20,6 @@ class CallingCard {
 		this.calculateRemaingMinutes()
 		this.getRemainingMinutes()
 		this.getRemainingFunds()
-		//return this.balanceInMinutes
 	}
 
 	useMinutes(minutesToUse) {
@@ -41,4 +41,23 @@ class CallingCard {
 		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars
 		return this.balanceInDollars
 	}
+	
+    // Format phone number
+    formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+            return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        }
+        return null
+	}
+	
+    // Create history list item
+    createListItem(callHistoryText) {
+        var newCallHistoryItem = document.createElement('li')
+        newCallHistoryItem.innerText = callHistoryText
+        console.log('New call: ', callHistoryText)
+        var callHistoryList = document.getElementById('call-history-list')
+        callHistoryList.appendChild(newCallHistoryItem)
+    }
 }
