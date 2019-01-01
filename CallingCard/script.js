@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    let card = new CallingCard(20, 2)
+    let card = new CallingCard(20)
     let phone = new CellPhone(card)
-    card.calculateRemaingMinutes()
-    card.getRemainingMinutes()
-    card.getRemainingFunds()
+    card.addDollars(1)
 
     // Start call button event listener
     var startCall = document.getElementById('start-call-button')
@@ -18,9 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var endCall = document.getElementById('end-call-button')
     endCall.addEventListener('click', function (event) {
         event.preventDefault()
-        phone.endCall()        
-        card.getRemainingMinutes()
-        card.getRemainingFunds()
+        phone.endCall()
     })
 
     // Add funds button event listener
