@@ -3,6 +3,8 @@ class CellPhone {
         this.card = card
         this.remainingMinutes = card.balanceInMinutes
         this.reminingFunds = card.balanceInDollars
+        this.startTime = ''
+        this.endTime = ''
         this.isTalking = false
         this.callLength = 0
         this.currCall = {
@@ -11,6 +13,11 @@ class CellPhone {
             wasCutOff: false
         }
         this.prevCalls = []
+    }
+
+    updateStatus(statusMessage, color) {
+        document.getElementById('status').innerHTML = statusMessage
+        document.getElementById('status').color = color
     }
 
     isTalking() {
@@ -34,8 +41,9 @@ class CellPhone {
             this.currCall.callLength = 0
             this.currCall.wasCutOff = false
             this.createListItem(formattedPhoneNumber)
-            console.log('Starting call...')
             this.isTalking = true
+            this.startTimer()
+            this.updateStatus('Call in progress', 'red')
         } else {
             console.log('Insufficient funds')
             return
@@ -48,22 +56,31 @@ class CellPhone {
         } else {
             //this.prevCalls.push(this.currCall)
             this.isTalking = false
-            this.useMinutes(1)
             document.getElementById('phone-number-input').value = ""
-            console.log('Ending call...')
+            this.updateStatus('Call ended', 'green')
+            this.endTimer()
             this.card.getRemainingMinutes()
             this.card.getRemainingFunds()
             this.currCall.phoneNumber = null
         }
     }
 
-    tick() {
-        this.currCall.callLength++
-        this.remainingMinutes--
-        console.log('Tick')
-        if (this.remainingMinutes === 0) {
+    startTimer() {
+        this.startTime = new Date()
+        var formattedStart = this.startTime.toLocaleString()
+        console.log('Starting call at', formattedStart)
+    }
+
+    endTimer() {
+        this.endTime = new Date()
+        var formattedEnd = this.endTime.toLocaleString()
+        var usedTime = (this.endTime.getTime() - this.startTime.getTime()) / 60000
+        console.log('Ending call at', formattedEnd)
+        console.log('Call length:', usedTime.toFixed(2), 'minutes')
+        this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))
+        if (this.card.balanceInMinutes === 0) {
             this.currCall.wasCutOff = true
-            this.endCall()
+            this.card.endCall()
         }
     }
 
@@ -98,10 +115,11 @@ class CellPhone {
         callHistoryList.appendChild(newCallHistoryItem)
     }
 
-    useMinutes(minutesToUse) {
-        this.card.balanceInMinutes -= minutesToUse
-        if (this.card.balanceInMinutes < 0) {
-            this.card.balanceInMinutes = 0
-        }
-    }
+    // // Decrement card time balance by a given amount
+    // useMinutes(minutesToUse) {
+    //     this.card.balanceInMinutes -= minutesToUse
+    //     if (this.card.balanceInMinutes < 0) {
+    //         this.card.balanceInMinutes = 0
+    //     }
+    // }
 }

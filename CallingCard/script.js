@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var addFunds = document.getElementById('add-funds-button')
     addFunds.addEventListener('click', function (event) {
         event.preventDefault()
-        var fundsToAdd = document.getElementById('funds-input').value
-        console.log('Adding $', fundsToAdd)
+        var fundsToAdd = document.getElementById('funds-input').value        
         card.addDollars(fundsToAdd)
     })
 
