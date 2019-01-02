@@ -17,7 +17,7 @@ class CellPhone {
 
     updateStatus(statusMessage, color) {
         document.getElementById('status').innerHTML = statusMessage
-        document.getElementById('status').color = color
+        document.getElementById('status').style.color = color
     }
 
     isTalking() {
@@ -29,7 +29,7 @@ class CellPhone {
             console.log('Call already in progress')
             return
         }
-        if (phoneNumber * 1 > 1000000000) {
+        if (phoneNumber.length === 10 && phoneNumber > 1000000000 * 1) {
             var formattedPhoneNumber = this.formatPhoneNumber(phoneNumber)
             console.log('Number', formattedPhoneNumber, 'meets requirements')
         } else {
@@ -40,14 +40,20 @@ class CellPhone {
             this.currCall.phoneNumber = phoneNumber
             this.currCall.callLength = 0
             this.currCall.wasCutOff = false
-            this.createListItem(formattedPhoneNumber)
             this.isTalking = true
             this.startTimer()
             this.updateStatus('Call in progress', 'red')
+            document.getElementById('phone-number-input').value = formattedPhoneNumber
         } else {
             console.log('Insufficient funds')
             return
         }
+    }
+
+    startTimer() {
+        this.startTime = new Date()
+        var formattedStart = this.startTime.toLocaleString()
+        console.log('Starting call at', formattedStart)
     }
 
     endCall() {
@@ -56,19 +62,15 @@ class CellPhone {
         } else {
             //this.prevCalls.push(this.currCall)
             this.isTalking = false
-            document.getElementById('phone-number-input').value = ""
+            var currentPhoneNumber = document.getElementById('phone-number-input').value
             this.updateStatus('Call ended', 'green')
-            this.endTimer()
+            var usedTime = this.endTimer()
+            this.createListItem(currentPhoneNumber, usedTime)
             this.card.getRemainingMinutes()
             this.card.getRemainingFunds()
             this.currCall.phoneNumber = null
+            document.getElementById('phone-number-input').value = ""
         }
-    }
-
-    startTimer() {
-        this.startTime = new Date()
-        var formattedStart = this.startTime.toLocaleString()
-        console.log('Starting call at', formattedStart)
     }
 
     endTimer() {
@@ -82,6 +84,7 @@ class CellPhone {
             this.currCall.wasCutOff = true
             this.card.endCall()
         }
+        return usedTime
     }
 
     getHistory() {
@@ -108,9 +111,9 @@ class CellPhone {
     }
 
     // Create history list item
-    createListItem(callHistoryText) {
+    createListItem(callHistoryText, usedTime) {
         var newCallHistoryItem = document.createElement('li')
-        newCallHistoryItem.innerText = callHistoryText
+        newCallHistoryItem.innerText = callHistoryText + ' : ' + usedTime.toFixed(2) + ' minutes'
         var callHistoryList = document.getElementById('call-history-list')
         callHistoryList.appendChild(newCallHistoryItem)
     }

@@ -25,19 +25,19 @@ class CallingCard {
 
 	getRemainingMinutes() {
 		if (this.balanceInMinutes !== 1) {
-			console.log('Remaining time: ', this.balanceInMinutes, 'minutes')
+			console.log('Remaining time: ', this.balanceInMinutes.toFixed(2), 'minutes')
 			document.getElementById('remaining-minutes-text').innerHTML = "Remaining time: " + this.balanceInMinutes.toFixed(2) + " minutes"
 		} else {
-			console.log('Remaining time: ', this.balanceInMinutes, 'minute')
+			console.log('Remaining time: ', this.balanceInMinutes.toFixed(2), 'minute')
 			document.getElementById('remaining-minutes-text').innerHTML = "Remaining time: " + this.balanceInMinutes.toFixed(2) + " minute"
 		}
 		return this.balanceInMinutes
 	}
 
 	getRemainingFunds() {
-		this.balanceInDollars = (this.balanceInMinutes * this.cardRate) / 100
+		this.balanceInDollars = ((this.balanceInMinutes * this.cardRate) / 100).toFixed(2)
 		console.log('Current balance: $', this.balanceInDollars)
-		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars.toFixed(2)
-		return this.balanceInDollars.toFixed(2)
+		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars
+		return this.balanceInDollars
 	}
 }
