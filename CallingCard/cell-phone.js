@@ -29,15 +29,16 @@ class CellPhone {
             console.log('Call already in progress')
             return
         }
-        if (phoneNumber.length === 10 && phoneNumber > 1000000000 * 1) {
-            var formattedPhoneNumber = this.formatPhoneNumber(phoneNumber)
+        var cleanPhoneNumber = phoneNumber.replace(/\D/g, '')
+        if (cleanPhoneNumber.length === 10 && cleanPhoneNumber > 1000000000 * 1) {
+            var formattedPhoneNumber = this.formatPhoneNumber(cleanPhoneNumber)
             console.log('Number', formattedPhoneNumber, 'meets requirements')
         } else {
             console.log('Number', phoneNumber, 'does not meet requirements')
             return
         }
         if (this.card.balanceInMinutes > 0) {
-            this.currCall.phoneNumber = phoneNumber
+            this.currCall.phoneNumber = cleanPhoneNumber
             this.currCall.callLength = 0
             this.currCall.wasCutOff = false
             this.isTalking = true
@@ -81,6 +82,7 @@ class CellPhone {
         console.log('Call length:', usedTime.toFixed(2), 'minutes')
         this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))
         if (this.card.balanceInMinutes === 0) {
+            this.card.balanceInMinutes = 0
             this.currCall.wasCutOff = true
             this.card.endCall()
         }
@@ -101,9 +103,9 @@ class CellPhone {
     }
 
     // Format phone number
-    formatPhoneNumber(phoneNumberString) {
-        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-        var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    formatPhoneNumber(phoneNumber) {
+        //var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = phoneNumber.match(/^(\d{3})(\d{3})(\d{4})$/)
         if (match) {
             return '(' + match[1] + ') ' + match[2] + '-' + match[3]
         }
@@ -117,12 +119,4 @@ class CellPhone {
         var callHistoryList = document.getElementById('call-history-list')
         callHistoryList.appendChild(newCallHistoryItem)
     }
-
-    // // Decrement card time balance by a given amount
-    // useMinutes(minutesToUse) {
-    //     this.card.balanceInMinutes -= minutesToUse
-    //     if (this.card.balanceInMinutes < 0) {
-    //         this.card.balanceInMinutes = 0
-    //     }
-    // }
 }
