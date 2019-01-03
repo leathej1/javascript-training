@@ -6,7 +6,7 @@ class CellPhone {
         this.startTime = ''
         this.endTime = ''
         this.isTalking = false
-        this.callLength = 0
+        this.usedTime = 0
         this.currCall = {
             callLength: 0,
             phoneNumber: '',
@@ -15,15 +15,13 @@ class CellPhone {
         this.prevCalls = []
     }
 
+    // Set a status message and color on the page
     updateStatus(statusMessage, color) {
         document.getElementById('status').innerHTML = statusMessage
         document.getElementById('status').style.color = color
     }
 
-    isTalking() {
-        return this.currCall.callLength > 0 ? true : false
-    }
-
+    // Perform a check of the phone number and start the call and timer
     startCall(phoneNumber) {
         if (this.isTalking === true) {
             console.log('Call already in progress')
@@ -47,21 +45,23 @@ class CellPhone {
             document.getElementById('phone-number-input').value = formattedPhoneNumber
         } else {
             console.log('Insufficient funds')
+            this.wasCutOff = true
             return
         }
     }
 
+    // Capture the start time of the call
     startTimer() {
         this.startTime = new Date()
         var formattedStart = this.startTime.toLocaleString()
-        console.log('Starting call at', formattedStart)
+        console.log('Starting call at ' + formattedStart)
     }
 
+    // Check if a call is active then ends the call and log the history
     endCall() {
         if (this.currCall.phoneNumber == null) {
             console.log('No calls are currently active')
         } else {
-            //this.prevCalls.push(this.currCall)
             this.isTalking = false
             var currentPhoneNumber = document.getElementById('phone-number-input').value
             this.updateStatus('Call ended', 'green')
@@ -74,11 +74,12 @@ class CellPhone {
         }
     }
 
+    // Capture the end time of the call and calculates the time used
     endTimer() {
         this.endTime = new Date()
         var formattedEnd = this.endTime.toLocaleString()
         var usedTime = (this.endTime.getTime() - this.startTime.getTime()) / 60000
-        console.log('Ending call at', formattedEnd)
+        console.log('Ending call at ' + formattedEnd)
         console.log('Call length:', usedTime.toFixed(2), 'minutes')
         this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))
         if (this.card.balanceInMinutes === 0) {
@@ -89,22 +90,14 @@ class CellPhone {
         return usedTime
     }
 
-    getHistory() {
-        let historyString = ''
-
-        this.prevCalls.forEach(call => {
-            let { phoneNumber, callLength, wasCutOff } = call
-            let pluralOrSingular = callLength !== 1 ? 'minutes' : 'minute'
-            let wasCutOffYo = wasCutOff ? 'cut off at' : ''
-            historyString += ` ${wasCutOffYo} ${phoneNumber} (${callLength} ${pluralOrSingular}),`
-        })
-
-        return historyString.slice(0, historyString.length - 1)
+    // Update the page with new data
+    updatePage() {
+        this.card.getRemainingMinutes()
+        this.card.getRemainingFunds()
     }
 
-    // Format phone number
+    // Format the phone number
     formatPhoneNumber(phoneNumber) {
-        //var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
         var match = phoneNumber.match(/^(\d{3})(\d{3})(\d{4})$/)
         if (match) {
             return '(' + match[1] + ') ' + match[2] + '-' + match[3]
