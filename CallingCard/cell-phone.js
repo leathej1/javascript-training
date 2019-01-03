@@ -40,10 +40,11 @@ class CellPhone {
             this.currCall.wasCutOff = false
             this.isTalking = true
             this.startTimer()
-            this.updateStatus('Call in progress', 'red')
+            this.updateStatus('Call in progress', 'blue')
             document.getElementById('phone-number-input').value = formattedPhoneNumber
         } else {
             console.log('Insufficient funds')
+            this.updateStatus('Insufficient funds', 'red')
             this.wasCutOff = true
             return
         }
@@ -66,8 +67,9 @@ class CellPhone {
             this.updateStatus('Call ended', 'green')
             var usedTime = this.endTimer()
             this.createListItem(currentPhoneNumber, usedTime, this.currCall.wasCutOff)
-            this.card.getRemainingMinutes()
-            this.card.getRemainingFunds()
+            this.card.calculateRemaingDollars()
+            this.card.pushValues()
+            this.card.// nope()
             this.currCall.phoneNumber = null
             document.getElementById('phone-number-input').value = ""
         }
@@ -84,6 +86,7 @@ class CellPhone {
             usedTime = this.card.balanceInMinutes
             this.card.balanceInMinutes = 0
             this.currCall.wasCutOff = true
+            this.updateStatus('Call was cut off', 'red')
             return usedTime
         } else {
             this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))

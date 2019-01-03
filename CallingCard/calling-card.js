@@ -8,6 +8,9 @@ class CallingCard {
 	// Calculates the remaining minutes based on card fund balance and rate
 	calculateRemaingMinutes() {
 		this.balanceInMinutes = Math.floor(this.balanceInDollars / this.cardRate * 100)
+		if (this.balanceInMinutes < 0) {
+			this.balanceInMinutes = 0
+		}
 		return this.balanceInMinutes.toFixed(2)
 	}
 
@@ -23,8 +26,8 @@ class CallingCard {
 			this.balanceInDollars += dollarsToAdd * 1
 			console.log('Adding $' + dollarsToAdd)
 			this.calculateRemaingMinutes()
-			this.getRemainingMinutes()
-			this.getRemainingFunds()
+			this.pushValues()
+			this.// nope()
 			document.getElementById('funds-input').value = ""
 		} else {
 			console.log('No fund value supplied')
@@ -32,7 +35,7 @@ class CallingCard {
 	}
 
 	// Sets the remaining minutes value on the page
-	getRemainingMinutes() {
+	pushValues() {
 		if (this.balanceInMinutes !== 1) {
 			console.log('Remaining time: ', this.balanceInMinutes.toFixed(2), 'minutes')
 			document.getElementById('remaining-minutes-text').innerHTML = "Remaining time: " + this.balanceInMinutes.toFixed(2) + " minutes"
@@ -40,11 +43,6 @@ class CallingCard {
 			console.log('Remaining time: ', this.balanceInMinutes.toFixed(2), 'minute')
 			document.getElementById('remaining-minutes-text').innerHTML = "Remaining time: " + this.balanceInMinutes.toFixed(2) + " minute"
 		}
-	}
-
-	// Sets the remaining funds value on the page
-	getRemainingFunds() {
-		this.calculateRemaingDollars()
 		console.log('Current balance: $', this.balanceInDollars.toFixed(2))
 		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars.toFixed(2)
 	}
