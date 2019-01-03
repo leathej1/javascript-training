@@ -7,13 +7,13 @@ class CallingCard {
 
 	// Calculates the remaining minutes based on card fund balance and rate
 	calculateRemaingMinutes() {
-		this.balanceInMinutes = Math.floor((this.balanceInDollars * 100) / this.cardRate) * 1
+		this.balanceInMinutes = Math.floor(this.balanceInDollars / this.cardRate * 100)
 		return this.balanceInMinutes.toFixed(2)
 	}
 
 	// Calculated the remaining funds based on card minutes balance and rate
 	calculateRemaingDollars() {
-		this.balanceInDollars = Math.floor((this.balanceInMinutes * this.cardRate) * 1)
+		this.balanceInDollars = this.balanceInMinutes * this.cardRate / 100
 		return this.balanceInDollars.toFixed(2)
 	}
 
@@ -44,6 +44,7 @@ class CallingCard {
 
 	// Sets the remaining funds value on the page
 	getRemainingFunds() {
+		this.calculateRemaingDollars()
 		console.log('Current balance: $', this.balanceInDollars.toFixed(2))
 		document.getElementById('remaining-funds-text').innerHTML = "Current balance: $" + this.balanceInDollars.toFixed(2)
 	}

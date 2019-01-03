@@ -37,7 +37,6 @@ class CellPhone {
         }
         if (this.card.balanceInMinutes > 0) {
             this.currCall.phoneNumber = cleanPhoneNumber
-            this.currCall.callLength = 0
             this.currCall.wasCutOff = false
             this.isTalking = true
             this.startTimer()
@@ -66,7 +65,7 @@ class CellPhone {
             var currentPhoneNumber = document.getElementById('phone-number-input').value
             this.updateStatus('Call ended', 'green')
             var usedTime = this.endTimer()
-            this.createListItem(currentPhoneNumber, usedTime)
+            this.createListItem(currentPhoneNumber, usedTime, this.currCall.wasCutOff)
             this.card.getRemainingMinutes()
             this.card.getRemainingFunds()
             this.currCall.phoneNumber = null
@@ -80,20 +79,17 @@ class CellPhone {
         var formattedEnd = this.endTime.toLocaleString()
         var usedTime = (this.endTime.getTime() - this.startTime.getTime()) / 60000
         console.log('Ending call at ' + formattedEnd)
-        console.log('Call length:', usedTime.toFixed(2), 'minutes')
-        this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))
-        if (this.card.balanceInMinutes === 0) {
+        if (this.card.balanceInMinutes * 1 <= usedTime * 1) {
+            console.log('Call length:', this.card.balanceInMinutes.toFixed(2), 'minutes')
+            usedTime = this.card.balanceInMinutes
             this.card.balanceInMinutes = 0
             this.currCall.wasCutOff = true
-            this.card.endCall()
+            return usedTime
+        } else {
+            this.card.balanceInMinutes = (this.card.balanceInMinutes - usedTime.toFixed(2))
+            console.log('Call length:', usedTime.toFixed(2), 'minutes')
+            return usedTime
         }
-        return usedTime
-    }
-
-    // Update the page with new data
-    updatePage() {
-        this.card.getRemainingMinutes()
-        this.card.getRemainingFunds()
     }
 
     // Format the phone number
@@ -108,7 +104,12 @@ class CellPhone {
     // Create history list item
     createListItem(callHistoryText, usedTime) {
         var newCallHistoryItem = document.createElement('li')
-        newCallHistoryItem.innerText = callHistoryText + ' : ' + usedTime.toFixed(2) + ' minutes'
+        var usedTimeSeconds = usedTime * 60
+        if (usedTime * 1 < 1 || usedTime * 1 == 0) {
+            newCallHistoryItem.innerText = callHistoryText + ' : ' + usedTimeSeconds.toFixed(2) + ' seconds' + ' (cutoff = ' + this.currCall.wasCutOff + ')'
+        } else {
+            newCallHistoryItem.innerText = callHistoryText + ' : ' + usedTime.toFixed(2) + ' minutes' + ' (cutoff = ' + this.currCall.wasCutOff + ')'
+        }
         var callHistoryList = document.getElementById('call-history-list')
         callHistoryList.appendChild(newCallHistoryItem)
     }
